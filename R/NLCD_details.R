@@ -56,7 +56,7 @@ col_lc <- data.frame(
     "Developed, High Intensity",
     "Barren Land (Rock/Sand/Clay)",
     "Deciduous Forest",
-    "Deciduous Forest",
+    "Evergreen Forest",
     "Mixed Forest",
     "Dwarf Scrub",
     "Scrub/Shrub",
