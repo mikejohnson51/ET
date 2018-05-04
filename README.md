@@ -1,7 +1,6 @@
 # ET
-Code for mapping, modeling, and validating evapotranspiration data across spatial and temporal scales:
 
-This is the code associated with four on going projects.
+Collection of scripts being used in four projects focused on the mapping, modeling, and validating of evapotranspiration data across spatial and temporal scales. As it develops it may be turned into a more seamless and interna coherent package:
 
 [![Travis-CI Build Status](https://travis-ci.org/mikejohnson51/ET.svg?branch=master)](https://travis-ci.org/mikejohnson51/ET)
 
