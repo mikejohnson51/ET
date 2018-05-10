@@ -7,7 +7,6 @@
 #' @return dataframe
 #' @export
 #'
-#' @examples
 #'
 
 getLCc = function(PET = NULL,

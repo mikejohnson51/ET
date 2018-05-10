@@ -24,6 +24,3 @@ a data.frame of aggregated values by id
 \description{
 Aggregate Data by ID
 }
-\examples{
-
-}

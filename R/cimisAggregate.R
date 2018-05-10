@@ -9,8 +9,6 @@
 #' @return a data.frame of aggregated values by id
 #' @export
 #'
-#' @examples
-#'
 
 aggregateData = function(data,
                          id = NULL,

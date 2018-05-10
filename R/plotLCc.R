@@ -6,7 +6,6 @@
 #'
 #' @export
 #'
-#' @examples
 
 plotLCc = function(LC = NULL) {
   lc = as.matrix(LC[, !(names(LC) %in% names(col_lc))])
@@ -28,11 +27,11 @@ plotLCc = function(LC = NULL) {
       cex.main = .75,
       axes = F
     )
-    axis(1, at = c(1:12), lab = c(1:12))
+    axis(1, at = c(1:12), labels = c(1:12))
     axis(2,
          las = 1,
          at = seq(0, 1, .1),
-         lab = seq(0, 1, .1))
+         labels = seq(0, 1, .1))
 
 
   }

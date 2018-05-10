@@ -65,11 +65,11 @@
 
 #' Watersheds
 #'
-#' \code{kopRas} contains the March 2017 Global Koppen Climate Classification Dataset
+#' \code{ws} contains the watershed centroids used in this study
 #'
 #' @docType data
 #'
-#' @format a \code{RasterLayer}
+#' @format a \code{data.frame}
 #'
 #' @references  Kottek, M., J. Grieser, C. Beck, B. Rudolf, and F. Rubel, 2006:
 #' World Map of the Köppen-Geiger climate classification updated. Meteorol. Z., 15, 259-263.
@@ -79,7 +79,7 @@
 #'
 #' @examples
 #' \dontrun{
-#'  load("koppen_raster.rda")
+#'  load("watersheds.rda")
 #' }
 
 "ws"

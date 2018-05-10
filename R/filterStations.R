@@ -10,10 +10,10 @@
 #' @export
 #'
 #' @examples
-filterStatios = function(data, stats.data, statistic, criteria, meet = TRUE) {
+filterStations = function(data, stats.data, statistic, criteria, meet = TRUE) {
 
-  bad.stations = data[names(data) %in% stats.data[stats.data[, statistic] < critieria,]]$ID
-  good.stations = data[names(data) %in% stats.data[stats.data[, statistic] >= critieria,]]$ID
+  bad.stations = data[names(data) %in% stats.data[stats.data[, statistic] < criteria,]]$ID
+  good.stations = data[names(data) %in% stats.data[stats.data[, statistic] >= criteria,]]$ID
 
   if (isTRUE(meet)) {
     return(good.stations)

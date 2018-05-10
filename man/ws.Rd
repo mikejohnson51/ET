@@ -4,7 +4,7 @@
 \name{ws}
 \alias{ws}
 \title{Watersheds}
-\format{a \code{RasterLayer}}
+\format{a \code{data.frame}}
 \source{
 \href{http://koeppen-geiger.vu-wien.ac.at/present.htm}{Koppen Climate Data}
 }
@@ -12,11 +12,11 @@
 ws
 }
 \description{
-\code{kopRas} contains the March 2017 Global Koppen Climate Classification Dataset
+\code{ws} contains the watershed centroids used in this study
 }
 \examples{
 \dontrun{
- load("koppen_raster.rda")
+ load("watersheds.rda")
 }
 }
 \references{

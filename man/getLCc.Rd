@@ -19,6 +19,3 @@ dataframe
 \description{
 Get Land Cover Coeffieicentes from MODIS data
 }
-\examples{
-
-}

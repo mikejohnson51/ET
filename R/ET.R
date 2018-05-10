@@ -12,7 +12,7 @@
 #'@importFrom graphics axis par plot text
 #'@importFrom grDevices dev.off png
 #'@importFrom stats aggregate complete.cases lm pf sd
-#'@importFrom utils write.csv
+#'@importFrom utils write.csv head tail
 #'@importFrom readxl read_excel
 
 
