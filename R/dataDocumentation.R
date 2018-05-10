@@ -61,9 +61,9 @@
 #'  load("daymet_flux.rda")
 #' }
 
-"watersheds"
+"daymet_flux"
 
-#' Koppen Climate Classification Raster, March 2017
+#' Watersheds
 #'
 #' \code{kopRas} contains the March 2017 Global Koppen Climate Classification Dataset
 #'
@@ -82,7 +82,7 @@
 #'  load("koppen_raster.rda")
 #' }
 
-"kopRas"
+"ws"
 
 #' DAYMET Tile Index
 #'
@@ -107,34 +107,3 @@
 #' }
 
 "daymet_tiles"
-
-
-#' Snotel Stations
-#'
-#' \code{snotel} information regarding the metadata of NRCS SNOTEL stations
-#'
-#' @docType data
-#'
-#' @format a \code{dataframe} instance, 1 row per station with columns:
-#' \itemize{
-#' \item 'NETWORK':    A \code{integer}    Network of interest
-#' \item 'STATE':      A \code{integer}    State abbriviation
-#' \item 'NAME':       A \code{character}  Site name
-#' \item 'START.DATE': A \code{integer}    Day of first measurement
-#' \item 'LAT':        A \code{integer}    Station Latitude
-#' \item 'LONG':       A \code{character}  Station Longitude
-#' \item 'ELEV':       A \code{character}  Station Elevation
-#' \item 'COUNTY':     A \code{character}  County
-#' \item 'HUC12.NAME': A \code{character}  HUC 12 Name
-#' \item 'HUC12.ID':   A \code{character}  HUC 12 code
-#' }
-#'
-#' @source \href{https://wcc.sc.egov.usda.gov/nwcc/yearcount?network=sntl&state=&counttype=statelist}{SNOTEL INFORMATION}
-#'
-#' @examples
-#' \dontrun{
-#'  load("snotelStations.rda")
-#' }
-
-"snotel"
-

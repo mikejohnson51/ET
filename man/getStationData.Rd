@@ -4,7 +4,8 @@
 \alias{getStationData}
 \title{Parse Data from Raw Station Output}
 \usage{
-getStationData(data = NULL, stationID = NULL, timestep = "monthly")
+getStationData(data = NULL, stationID = NULL, timestep = "monthly",
+  WaterYear = TRUE)
 }
 \arguments{
 \item{data}{a csv of RAW PRISM and USGS Flow data}
@@ -12,6 +13,8 @@ getStationData(data = NULL, stationID = NULL, timestep = "monthly")
 \item{stationID}{the station to parse}
 
 \item{timestep}{timestep to average to: options include 'monthly' and 'annual'}
+
+\item{WaterYear}{(logical) should the data be converted to water year?}
 }
 \value{
 a list of data.frames, one for each station
