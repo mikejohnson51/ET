@@ -63,26 +63,6 @@
 
 "daymet_flux"
 
-#' Watersheds
-#'
-#' \code{ws} contains the watershed centroids used in this study
-#'
-#' @docType data
-#'
-#' @format a \code{data.frame}
-#'
-#' @references  Kottek, M., J. Grieser, C. Beck, B. Rudolf, and F. Rubel, 2006:
-#' World Map of the Köppen-Geiger climate classification updated. Meteorol. Z., 15, 259-263.
-#' DOI: 10.1127/0941-2948/2006/0130.
-#'
-#' @source \href{http://koeppen-geiger.vu-wien.ac.at/present.htm}{Koppen Climate Data}
-#'
-#' @examples
-#' \dontrun{
-#'  load("watersheds.rda")
-#' }
-
-"ws"
 
 #' DAYMET Tile Index
 #'
