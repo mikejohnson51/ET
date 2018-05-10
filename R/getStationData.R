@@ -3,6 +3,7 @@
 #' @param data a csv of RAW PRISM and USGS Flow data
 #' @param stationID the station to parse
 #' @param timestep timestep to average to: options include 'monthly' and 'annual'
+#' @param WaterYear (logical) should the data be converted to water year?
 #'
 #' @return a list of data.frames, one for each station
 #' @export
@@ -12,16 +13,16 @@
 
 getStationData = function(data = NULL,
                           stationID = NULL,
-                          timestep = "monthly") {
+                          timestep = "monthly", WaterYear = TRUE) {
   items = list()
 
   for (k in seq_along(stationID)) {
     stat.data = data[data$GAGE_ID == stationID[k],]
 
-    info = stat.data[, 1:3]
+    info = stat.data[, colnames(data) %in% c("AREA", "YEAR", "GAGE_ID")]
 
     PPT  = stat.data[, grepl('PPT', colnames(stat.data))]
-    Q    = stat.data[, grepl('Q', colnames(stat.data))]
+    Q    = stat.data[, grepl('DISCHARGE', colnames(stat.data))]
     TMAX = stat.data[, grepl('TMAX', colnames(stat.data))]
 
     date.matrix = NULL
@@ -41,11 +42,24 @@ getStationData = function(data = NULL,
     Q.m3   = Q  * .0283 * 86400 * date.matrix
     PPT.m3 = PPT  * 0.001 * info$AREA[1]
     ET     = PPT.m3 - Q.m3
-
-    colnames(ET)   = paste0("ET_", sprintf("%02d", c(10:12, 1:9)))
-
+    colnames(ET)   = paste0("ET_", sprintf("%02d", 1:12))
     ET.P = ET / PPT.m3
-    colnames(ET.P) = paste0("Ratio_", sprintf("%02d", c(10:12, 1:9)))
+    colnames(ET.P) = paste0("Ratio_", sprintf("%02d", 1:!2))
+
+    if(WaterYear){
+        TMAX = toWY(TMAX)
+        Q.m3 = toWY(Q.m3)
+        PPT.m3 = toWY(PPT.m3)
+        ET = toWY(ET)
+        ET.P = toWY(ET.P)
+
+        info = info[-1,]
+
+        colnames(Q.m3)   = paste0("Q_", sprintf("%02d", c(10:12, 1:9)))
+        colnames(PPT.m3)   = paste0("PPT_", sprintf("%02d", c(10:12, 1:9)))
+        colnames(ET)   = paste0("ET_", sprintf("%02d", c(10:12, 1:9)))
+        colnames(ET.P) = paste0("Ratio_", sprintf("%02d", c(10:12, 1:9)))
+      }
 
     fin = as.data.frame(cbind(info, Q.m3, PPT.m3, TMAX, ET, ET.P))
 
@@ -73,4 +87,14 @@ getStationData = function(data = NULL,
 
   return(items)
 
+}
+
+
+toWY = function(data){
+  data = c(t(data))
+  data = tail(data, -9)
+  data = head(data, -3)
+  data = as.data.frame(matrix(data, ncol = 12))
+
+  return(data)
 }
