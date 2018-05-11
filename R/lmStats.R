@@ -30,3 +30,4 @@ lmStats = function(y, x, stationData = NULL) {
 
   return(stats)
 }
+
