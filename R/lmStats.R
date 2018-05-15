@@ -9,24 +9,29 @@
 #'
 #' @examples
 
-
 lmStats = function(y, x, stationData = NULL) {
+
+  if(!(class(stationData) == 'list')){ stationData = list(stationData)}
   stats = NULL
+  ID = NULL
 
   for (i in 1:length(stationData)) {
-    mod  = lm(y ~ x, data = stationData[[i]])
+    mod  = lm(stationData[[i]][, y] ~ stationData[[i]][, x])
 
     coef = mod$coefficients[2]
     r2 = summary(mod)$adj.r.squared
     f = summary(mod)$fstatistic
     p <- pf(f[1], f[2], f[3], lower.tail = F)
 
+    ID = append(ID, stationData[[i]]$GAGE_ID[1])
 
-    stats = rbind(stats, c(as.numeric(names(stationData)[i]), coef, r2, p))
+    stats = rbind(stats, as.numeric(c(coef, r2, p)))
   }
 
-  colnames(stats) = c("ID", "coeff", "r2", "p")
+  colnames(stats) = c("coeff", "r2", "p")
   stats = as.data.frame(stats, stringsAsFactors = F, row.names = NULL)
+
+  if(length(ID) > 0) { stats$ID = ID }
 
   return(stats)
 }

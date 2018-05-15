@@ -2,13 +2,13 @@
 % Please edit documentation in R/toWY.R
 \name{toWY}
 \alias{toWY}
-\title{Converts data from Calander year to water year}
+\title{To Water Year}
 \usage{
 toWY(data)
 }
 \arguments{
-\item{data}{an input matrix where rows are years and columns are months}
+\item{data}{data organized with rows of years and columns of monthly values}
 }
 \description{
-Converts data from Calander year to water year
+Convert matrix from calander year to water year
 }

@@ -24,6 +24,7 @@ getStationData = function(data = NULL,
     PPT  = stat.data[, grepl('PPT', colnames(stat.data))]
     Q    = stat.data[, grepl('DISCHARGE', colnames(stat.data))]
     TMAX = stat.data[, grepl('TMAX', colnames(stat.data))]
+    TMIN = stat.data[, grepl('TMIN', colnames(stat.data))]
 
     date.matrix = NULL
 
@@ -39,7 +40,7 @@ getStationData = function(data = NULL,
 
     }
 
-    Q.m3   = Q  * .0283 * 86400 * date.matrix
+    Q.m3   = Q  * .0283168 * 86400 * date.matrix
     PPT.m3 = PPT  * 0.001 * info$AREA[1]
     ET     = PPT.m3 - Q.m3
     colnames(ET)   = paste0("ET_", sprintf("%02d", 1:12))
@@ -48,6 +49,7 @@ getStationData = function(data = NULL,
 
     if(WaterYear){
         TMAX = toWY(TMAX)
+        TMIN = toWY(TMIN)
         Q.m3 = toWY(Q.m3)
         PPT.m3 = toWY(PPT.m3)
         ET = toWY(ET)
@@ -59,9 +61,11 @@ getStationData = function(data = NULL,
         colnames(PPT.m3)   = paste0("PPT_", sprintf("%02d", c(10:12, 1:9)))
         colnames(ET)   = paste0("ET_", sprintf("%02d", c(10:12, 1:9)))
         colnames(ET.P) = paste0("Ratio_", sprintf("%02d", c(10:12, 1:9)))
+        colnames(TMAX) = paste0("TMAX", sprintf("%02d", c(10:12, 1:9)))
+        colnames(TMIN) = paste0("TMIN", sprintf("%02d", c(10:12, 1:9)))
       }
 
-    fin = as.data.frame(cbind(info, Q.m3, PPT.m3, TMAX, ET, ET.P))
+    fin = as.data.frame(cbind(info, Q.m3, PPT.m3, TMAX, TMIN, ET, ET.P))
 
 
     if (timestep == 'annual') {
@@ -70,6 +74,7 @@ getStationData = function(data = NULL,
         Q = rowMeans(fin[, grepl('Q', colnames(fin))]),
         PPT = rowMeans(fin[, grepl('PPT', colnames(fin))]),
         TMAX = rowMeans(fin[, grepl('TMAX', colnames(fin))]),
+        TMIN = rowMeans(fin[, grepl('TMIN', colnames(fin))]),
         ET = rowMeans(fin[, grepl('ET', colnames(fin))]),
         ET.P = rowMeans(fin[, grepl('Ratio', colnames(fin))]),
         DECADE = substr(info$YEAR, 2, 3)
@@ -77,24 +82,14 @@ getStationData = function(data = NULL,
     }
 
 
-    if (length(stationID) > 1) {
+    #if (length(stationID) > 1) {
       items[[paste(stationID[k])]] = fin
-    } else {
-      items = fin
-    }
+    #} else {
+   #   items = fin
+   # }
   }
 
 
   return(items)
 
-}
-
-
-toWY = function(data){
-  data = c(t(data))
-  data = tail(data, -9)
-  data = head(data, -3)
-  data = as.data.frame(matrix(data, ncol = 12))
-
-  return(data)
 }
