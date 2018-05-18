@@ -12,8 +12,8 @@
 #' @examples
 filterStations = function(data, stats.data, statistic, criteria, meet = TRUE) {
 
-  bad.stations = data[names(data) %in% stats.data[stats.data[, statistic] < criteria,]]$ID
-  good.stations = data[names(data) %in% stats.data[stats.data[, statistic] >= criteria,]]$ID
+  bad.stations = data[names(data) %in% stats.data[stats.data[, statistic] < criteria,]$ID]
+  good.stations = data[names(data) %in% stats.data[stats.data[, statistic] >= criteria,]$ID]
 
   if (isTRUE(meet)) {
     return(good.stations)
