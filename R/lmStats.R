@@ -9,7 +9,7 @@
 #'
 #' @examples
 
-lmStats = function(y, x, stationData = NULL) {
+lmStats = function(y, x, stationData = NULL, residuals = FALSE) {
 
   if(!(class(stationData) == 'list')){ stationData = list(stationData)}
   stats = NULL
@@ -17,6 +17,10 @@ lmStats = function(y, x, stationData = NULL) {
 
   for (i in 1:length(stationData)) {
     mod  = lm(stationData[[i]][, y] ~ stationData[[i]][, x])
+
+    if(residuals){
+      stationData[[i]]$resid = mod$residuals
+    }
 
     coef = mod$coefficients[2]
     r2 = summary(mod)$adj.r.squared
@@ -28,11 +32,15 @@ lmStats = function(y, x, stationData = NULL) {
     stats = rbind(stats, as.numeric(c(coef, r2, p)))
   }
 
+  if(residuals){
+    return(stationData)
+    } else {
   colnames(stats) = c("coeff", "r2", "p")
   stats = as.data.frame(stats, stringsAsFactors = F, row.names = NULL)
 
   if(length(ID) > 0) { stats$ID = ID }
 
   return(stats)
+  }
 }
 

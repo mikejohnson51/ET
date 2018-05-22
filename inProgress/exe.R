@@ -1,66 +1,102 @@
-data = as.data.frame(read.csv("/Users/Mike/Desktop/killme3/BasRef2.csv"))
-yearsOI = 1939:2009
+#data = readxl::read_xlsx("/Users/mikejohnson/Desktop/All_Fin_39_2014Area.xlsx")
+#yearsOI = 1939:2009
+#data = data[data$YEAR %in% yearsOI, ]
+#raw = data
+#save(raw, file="data/raw_data.rda")
 
-data = data[data$YEAR %in% yearsOI, ]
+load("data/raw_data.rda")
+#stations = as.character(unique(raw$GAGE_ID))
+#str.data = getStationData(data = raw, stationID = stations, timestep = 'annual', WaterYear = T)
+#save(str.data, file = "data/water_year_data.rda")
 
-stations = as.character(unique(data$GAGE_ID))
+load("data/water_year_data.rda")
 
+SAVE = lmStats(x ='PPT', y ="Q", stationData = str.data)
 
-str.data = getStationData(data = data, stationID = stations, timestep = 'annual', WaterYear = F)
+fin = filterStations(str.data,SAVE,"r2", 0)
 
-SAVE = lmStats(x ='ET', y ="PPT", stationData = str.data)
-#plotData(str.data, SAVE, save.path = "/Users/Mike/Desktop/jeremy_images")
+save2 = lmStats(x ='ET', y ="PPT", stationData = fin, residuals = TRUE)
 
-
-fin = filterStations(str.data,SAVE,"r2", .5)
-
-
-names(fin) %in%
-
-
-
-
-mean(SAVE$r2, na.rm = T)
-
-test = aggregate(. ~ DECADE, data = str.data[[2]], FUN = mean )
-
-mod = lm(ET ~ TMAX, data = fin[[1]])
-summary(mod)
-summary(lm(mod$residuals ~ str.data[[1]]$TMIN))
+r2_tmin = NULL
+r2_tmax = NULL
+type = NULL
+r2 = NULL
+area = NULL
 
 
+for(i in 1:length(save2)){
 
-par(mfrow = c(3,2))
-plot(str.data[[1]]$PPT, type = 'l', main = "PPT")
-  lines(rollmean(str.data[[1]]$PPT, 10, fill=NA), col = 'blue')
-plot(str.data[[1]]$TMAX, type = 'l', main = "TMAX")
-  lines(rollmean(str.data[[1]]$TMAX, 10, fill=NA), col = 'blue')
-plot(str.data[[1]]$TMIN, type = 'l', main = "Tmin")
-  lines(rollmean(str.data[[1]]$TMIN, 10, fill=NA), col = 'blue')
-plot(str.data[[1]]$Q, type = 'l', main = "Q")
-  lines(rollmean(str.data[[1]]$Q, 10, fill=NA), col = 'blue')
-plot(str.data[[1]]$ET, type = 'l', main = "ET")
-  lines(rollmean(str.data[[1]]$ET, 10, fill=NA), col = 'blue')
-plot(str.data[[1]]$ET.P, type = 'l', main = "ET.P")
-  lines(rollmean(str.data[[1]]$ET.P, 10, fill=NA), col = 'blue')
+  area = append(area, save2[[i]]$DRAIN_SQKM[1])
 
-library(zoo)
+  mod = lm( ET ~ PPT , data = save2[[i]])
+    test = data.frame(TMIN = save2[[i]]$TMIN, TMAX = save2[[i]]$TMAX, res = mod$residuals, decade = save2[[i]]$DECADE)
+    test = aggregate(. ~ decade, data = test, FUN = mean)
 
-corrplot::corrplot(cor(str.data[[1]][, 4:8]))
-dev.off()
+    mod_tmin = lm(res ~ TMIN, data = test)
+    mod_tmax = lm(res ~ TMAX, data = test)
 
-cor(str.data[[3]][, 4:8])
+    r2_tmin = append(r22, summary(mod_tmin)$adj.r.squared)
+    r2_tmax = append(r22, summary(mod_tmax)$adj.r.squared)
 
-data1 = str.data[[2]]
+    if(summary(mod_tmax)$adj.r.squared > summary(mod_tmin)$adj.r.squared) { t = 'tmax'} else {t = "tmin"}
 
-summary(lm(ET ~ TMAX + TMIN + PPT, data = data1))
+    type = append(type, t)
 
-summary(lm(ET.P ~ TMAX + TMIN, data = data1))
+    if(t == 'tmax') { r = summary(mod_tmax)$adj.r.squared } else {r = summary(mod_tmin)$adj.r.squared }
 
-summary(lm(ET ~ TMAX, data = data1))
+    r2 = append(r2, r)
+
+}
+
+fin3 = data.frame(ID = names(save2), type = type, r2 = r2, area = area)
+
+fin4 = fin3[fin3$r2 > .15, ]
 
 
-dev.off()
 
-load("data/watersheds.rda")
-getwd()
+m = map(fin4)
+
+m
+
+
+
+map = function(data = NULL){
+  load("data/watersheds.rda")
+
+  data = merge(data, ws, by = 'ID')
+
+  if(!exists("USA")) {
+    USA = rgdal::readOGR("/Users/mikejohnson/Downloads/cb_2017_us_nation_20m/cb_2017_us_nation_20m.shp")
+  }
+
+  sp = SpatialPointsDataFrame(cbind(data$LONG, data$LAT), data)
+
+  url <- sprintf("https://waterdata.usgs.gov/nwis/inventory/?site_no=%s",
+            sp$ID)
+
+  url_call = paste0('<a href=', url, '>', sp$ID, "</a>")
+
+  label <- paste(
+    paste("<strong>USGS ID:</strong>", url_call),
+    paste("<strong>Area (km2):</strong>", area),
+    paste("<strong>R2:</strong>", round(sp$r2, 3)),
+
+    sep = "<br/>"
+  )
+
+
+  m = leaflet() %>%
+    addProviderTiles(providers$CartoDB.Positron, group = "Base") %>%
+
+    addScaleBar("bottomleft") %>%
+
+    addCircleMarkers(lng= sp$LONG, lat = sp$LAT, radius = sp$r2*10, color = ifelse(sp$type == "tmax", "red", "blue"),
+                     popup  = label)
+
+
+  return(m)
+}
+
+htmlwidgets::saveWidget(m, file = "ET_v1.html")
+
+mean(fin4$area)
