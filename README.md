@@ -12,12 +12,12 @@ Collection of scripts being used in four projects focused on the mapping, modeli
 ## High Temporal Scale 
 ### California: 1km x 1km resolution at 10 day time steps
 
-![Global](https://github.com/mikejohnson51/ET/blob/master/img/CA1_100.gif)
+![CA](https://github.com/mikejohnson51/ET/blob/master/img/CA1_100.gif)
 
 ## Multi-decadal water balance derived 
 ### ~8,000 naturalized basin within CONUS
 
-![Global](https://github.com/mikejohnson51/ET/blob/master/img/ET_GIF2.gif)
+![Temp](https://github.com/mikejohnson51/ET/blob/master/img/Screenshot%202018-05-21%2017.35.30.png)
 
 ## Installation
 
