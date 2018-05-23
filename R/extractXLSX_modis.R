@@ -11,7 +11,7 @@
 
 extractXLSX_modis = function(dir = NULL, column = "MAX" ){
 
-  files = list.files(dir, full.names = T, pattern = ".xlsx")
+  files = list.files(dir, full.names = T, pattern = ".xl*")
   names = substr(list.files(dir), 1, 6)
 
   vals = col_lc
